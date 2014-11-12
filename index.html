@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+
+	<head>
+
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+
+		<title>HearthstoneDrafter: An Open-Source Arena Drafter for Hearthstone</title>
+
+		<meta name="author" content="Alex Safatli" />
+		<meta name="description" content="Hearthstone Arena Drafting Webapp" />
+		
+		<script type="text/javascript" src="javascript/jquery-1.6.3.min.js"></script>
+		<script type="text/javascript" src="javascript/scripts.js"></script>
+
+ 		<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+ 		<link href="css/mobile.css" rel="stylesheet" type="text/css" media="only screen and (max-device-width:480px)" />
+		<link href="css/mobile.css" rel="stylesheet" type="text/css" media="handheld" />
+
+	</head>
+
+	<body>
+	
+		<div id="wrap">
+		
+			<form class="mgform">
+				<div class="mgformitem">
+					<button type="submit">Draft for</button>
+					<select name="hero">
+					        <option value="random" selected>Random</option>
+					{% for hero in classes %}
+						<option value="{{ hero }}">{{ hero }}</option>
+					{% endfor %}
+					</select><
+				</div>
+			</form>
+		
+			{% if draft %}
+			<div class="outcome">
+			
+				<div class="panel left">
+					<p class="biggie">{{ hero.getName() }}</p> 
+					<p class="smaller">
+						with <em>{{ draft.getNumLegendaries() }}</em> legendary cards 
+					</p>			
+				</div>
+			
+				<div class="panel right">
+					<h3>Choose your cards:</h3>
+					{% for set in draft.getSets() %}
+					<p class="cards">{{ set[0] }} / {{ set[1] }} / {{ set[2] }}</p>
+					{% endfor %}
+				</div>
+				
+			</div>
+			{% endif %}
+
+			<div class="clear"></div>
+			
+			<div id="fineprint">
+			
+				<div id="thanks">
+					<p>You are using this app? Drop by to say thank you to <a href="https://plus.google.com/u/0/106697676547517787361/posts" target="_blank">+Alex Safatli</a>.</p>
+				</div>
+	
+				<div id="legal">			
+				  <!-- TODO: Legal for Blizzard -->
+				</div>
+
+			</div>
+			
+		</div>
+	
+	</body>
+
+</html>
