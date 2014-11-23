@@ -1,5 +1,9 @@
 /* card specifics */
 
+.hsimg {
+       width:120px;
+}
+
 .card_Spell {
         font-weight:bold;
 }

@@ -46,6 +46,10 @@ class drafter(object):
                 card = choice(cards)
             set.append(card)
         return tuple(set)
+
+    def getNumLegendaries(self):
+
+        return self.getNumOfCardsForRarity('Legendary')
     
     def getNumOfCardsForRarity(self,rarity):
 
@@ -71,7 +75,7 @@ class drafter(object):
       
         # Random cards.
         for set in xrange(30):
-            if set in [1,10,20,30]:
+            if set in [0,9,19,29]:
                 self.sets.append(self._getSet(2))
             else: self.sets.append(self._getSet())
 
@@ -168,6 +172,14 @@ class HearthstoneCard(object):
     def getRarity(self): return self.rarity
     def getType(self): return self.type
     def getHero(self): return self.hero
+
+    def getImgLink(self):
+
+        return 'http://wow.zamimg.com/images/hearthstone/cards/enus/original/%s.png' % (self.id)
+
+    def getPlainStr(self):
+
+        return '%s (%d)' % (self.name,self.cost)
     
     def toDebugString(self):
 

@@ -48,7 +48,7 @@
 				<div class="panel right">
 					<h3>Choose your cards:</h3>
 					{% for set in draft.getSets() %}
-					<p class="cards">{{ set[0] }} / {{ set[1] }} / {{ set[2] }}</p>
+					<p class="cards"><img class="hsimg" src="{{ set[0].getImgLink() }}" alt="{{ set[0].getPlainStr() }}" /> <img class="hsimg" src="{{ set[1].getImgLink() }}" alt="{{ set[1].getPlainStr() }}" /> <img class="hsimg" src="{{ set[2].getImgLink() }}" alt="{{ set[2].getPlainStr() }}" /></p>
 					{% endfor %}
 				</div>
 				
