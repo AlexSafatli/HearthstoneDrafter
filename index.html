@@ -10,16 +10,24 @@
 		<meta name="author" content="Alex Safatli" />
 		<meta name="description" content="Hearthstone Arena Drafting Webapp" />
 		
-		<script type="text/javascript" src="javascript/jquery-1.6.3.min.js"></script>
-		<script type="text/javascript" src="javascript/scripts.js"></script>
+		<script type="text/javascript" src="js/jquery-1.6.3.min.js"></script>
+		<script type="text/javascript" src="js/scripts.js"></script>
 
  		<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
- 		<link href="css/mobile.css" rel="stylesheet" type="text/css" media="only screen and (max-device-width:480px)" />
-		<link href="css/mobile.css" rel="stylesheet" type="text/css" media="handheld" />
+<!-- 		<link href="css/mobile.css" rel="stylesheet" type="text/css" media="only screen and (max-device-width:480px)" />
+		<link href="css/mobile.css" rel="stylesheet" type="text/css" media="handheld" />-->
 
 	</head>
 
 	<body>
+	
+		{% if draft %}
+		<div class="container">
+			{% for card in draft.getSortedCards() %}
+			<img class="card hsimgsmall" id="card_{{ card.getID() }}" src="{{ card.getImgLink() }}" alt="{{ card.getPlainStr() }}" />
+			{% endfor %}
+		</div>
+		{% endif %}
 	
 		<div id="wrap">
 		
@@ -31,46 +39,47 @@
 					{% for hero in classes %}
 						<option value="{{ hero }}">{{ hero }}</option>
 					{% endfor %}
-					</select><
+					</select>
 				</div>
 			</form>
 		
 			{% if draft %}
 			<div class="outcome">
 			
-				<div class="panel left">
+				<div class="panel">
 					<p class="biggie">{{ hero.getName() }}</p> 
 					<p class="smaller">
 						with <em>{{ draft.getNumLegendaries() }}</em> legendary cards 
 					</p>			
 				</div>
 			
-				<div class="panel right">
-					<h3>Choose your cards:</h3>
+				<div class="panel" id="draft">
+					<h3>Choose a card:</h3>
 					{% for set in draft.getSets() %}
-					<p class="cards"><img class="hsimg" src="{{ set[0].getImgLink() }}" alt="{{ set[0].getPlainStr() }}" /> <img class="hsimg" src="{{ set[1].getImgLink() }}" alt="{{ set[1].getPlainStr() }}" /> <img class="hsimg" src="{{ set[2].getImgLink() }}" alt="{{ set[2].getPlainStr() }}" /></p>
+					<p {% if draft.index(set) == 0 %}id="draftshow"{% endif %} class="cards"><img id="card_draft_{{ set[0].getID() }}" class="hsimg rarity_img_{{ set[0].rarity }}" src="{{ set[0].getImgLink() }}" alt="{{ set[0].getPlainStr() }}" /> <img id="card_draft_{{ set[1].getID() }}" class="hsimg rarity_img_{{ set[1].rarity }}" src="{{ set[1].getImgLink() }}" alt="{{ set[1].getPlainStr() }}" /> <img id="card_draft_{{ set[2].getID() }}" class="hsimg rarity_img_{{ set[2].rarity }}" src="{{ set[2].getImgLink() }}" alt="{{ set[2].getPlainStr() }}" /></p>
 					{% endfor %}
 				</div>
 				
 			</div>
 			{% endif %}
 
-			<div class="clear"></div>
-			
 			<div id="fineprint">
 			
 				<div id="thanks">
+				        <p>Version Alpha({{ version }})</p>
 					<p>You are using this app? Drop by to say thank you to <a href="https://plus.google.com/u/0/106697676547517787361/posts" target="_blank">+Alex Safatli</a>.</p>
 				</div>
 	
 				<div id="legal">			
-				  <!-- TODO: Legal for Blizzard -->
+				  This app is in no way associated with or endorsed by Blizzard Entertainment&reg; Blizzard Entertainment&reg;, Hearthstone&reg;, and associated terms are trademarks or registered trademarks of Blizzard Entertainment, Inc. in the US and/or other countries. All rights reserved.
 				</div>
 
 			</div>
 			
 		</div>
 	
+        <div id="clear"></div>
+    
 	</body>
 
 </html>

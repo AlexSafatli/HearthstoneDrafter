@@ -1,6 +1,20 @@
 // Everything to be executed after page load.
 
 $(document).ready(function () {
+	$(".cards").hide();
+    $(".card").hide();
+    $("#draftshow").show();
+    $(".hsimg").click(function() {
+		$(this).parent().next().attr("id","draftshow");
+		$(this).parent().attr("id","");
+        if ($(this).parent().next().length > 0) {
+            $(this).parent().next().show();
+        } else {
+            $("#draft").hide();
+        }
+		$(this).parent().hide();
+        $('#' + $(this).attr("id").replace('card_draft_','card_')).show();
+	});
 });
 
 // Everything to be executed after all images, etc.

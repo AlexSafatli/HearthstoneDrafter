@@ -60,10 +60,21 @@ class drafter(object):
             if set[0].getRarity() == rarity:
                 num +=1
         return num
-
+    
     def getSets(self): return self.sets
+    def index(self,i): return self.sets.index(i)
+    
+    def getSortedCards(self):
+	
+        ''' Return a sorted list of all present cards in the draft. '''
+		
+        cards = []
+        for set in self.sets:
+            for card in set: cards.append(card)
+        return sorted(cards,key=lambda d: d.getCost())
+        
     def get(self):
-
+    
         ''' Make the draft of thirty sets of three cards. '''
 
         # Random hero.
@@ -172,7 +183,7 @@ class HearthstoneCard(object):
     def getRarity(self): return self.rarity
     def getType(self): return self.type
     def getHero(self): return self.hero
-
+	
     def getImgLink(self):
 
         return 'http://wow.zamimg.com/images/hearthstone/cards/enus/original/%s.png' % (self.id)

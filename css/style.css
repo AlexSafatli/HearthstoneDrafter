@@ -4,6 +4,14 @@
        width:120px;
 }
 
+.hsimgsmall {
+	   width:75px;
+}
+
+.hsimg:hover {
+       background-color:#006089;
+}
+
 .card_Spell {
         font-weight:bold;
 }
@@ -38,19 +46,29 @@ a:hover{
 
 /* page layout */
 
+html,body {
+    height:100%;
+    weight:100%;
+    margin:0;
+    padding:0;
+}
+
 body {
 	background-color:#FFF;
 	font-family:sans-serif;
-	height:100%;
 	text-align:center;
 }
 
 #wrap{
-	background-color:#D0E3C7;
-	width:900px;
-	padding:10px;
-	border:5px solid #D4C098;
-	margin:auto;
+	padding:20px;
+	background-color:#A8E5FF;
+	width:40%;
+	float:right;
+	border-left:5px solid #006089;
+	margin-left:auto;
+    min-height:100%;
+    overflow:hidden;
+    
 }
 
 .outcome{
@@ -62,8 +80,13 @@ body {
 .panel, .chart{
 	padding:8px;
 	background-color:#FFF;
-	border:2px solid #92753D;
+	border:2px solid #006089;
 	margin:10px;
+}
+
+.container{
+	width:40%;
+    float:left;
 }
 
 .chart{
@@ -142,22 +165,10 @@ ol{
 	margin-bottom:5px;
 }
 
-/* floating */
+/* floats */
 
-.left, .right{
-	width:45%;
-}
-
-.left{
-	float:left;
-}
-
-.right{
-	float:right;
-}
-
-.clear{
-	clear:both;
+#clear {
+    float:clear;
 }
 
 /* --- OLD WRAP ---

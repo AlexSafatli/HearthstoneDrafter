@@ -4,8 +4,9 @@
 # -------------------------
 # Webapp interface.
 
-import webapp2, jinja2, os, cgi, hearthstone
+import webapp2, jinja2, os, cgi, hearthstone, json
 
+VERSION = 342
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader = jinja2.FileSystemLoader(os.path.dirname(__file__)))
 
@@ -28,7 +29,7 @@ class MainPage(webapp2.RequestHandler):
             hero, draftsets = draft.get()
             
         # Jinja template value and handling.
-        template_values = {'draft':draft,'hero':hero,'classes':draft.collection.getHeroNames()}
+        template_values = {'draft':draft,'hero':hero,'classes':draft.collection.getHeroNames(),'version':VERSION}
         template = JINJA_ENVIRONMENT.get_template('index.html')
         
         # Write to HTML file.
