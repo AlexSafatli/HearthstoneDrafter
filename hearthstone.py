@@ -1,5 +1,5 @@
 from random import choice, uniform
-import json
+import json, copy
 
 HS_CARD_DATA   = 'data/cards.json'
 HS_RARITY_RANK = {0:'Free',1:'Common',2:'Rare',3:'Epic',4:'Legendary'}
@@ -11,6 +11,9 @@ class drafter(object):
       self.hero       = preferred_hero
       self.collection = HearthstoneCollection()
       self.sets       = []      
+    
+    def __len__(self): return len(self.sets)
+    def size(self): return self.__len__()
     
     def _makeSequenceOfApplicableCards(self,rarity):
 
@@ -44,7 +47,7 @@ class drafter(object):
             card = choice(cards)
             while card in set:
                 card = choice(cards)
-            set.append(card)
+            set.append(copy.deepcopy(card))
         return tuple(set)
 
     def getNumLegendaries(self):
@@ -71,7 +74,7 @@ class drafter(object):
         cards = []
         for set in self.sets:
             for card in set: cards.append(card)
-        return sorted(cards,key=lambda d: d.getCost())
+        return sorted(cards,key=lambda d: (d.getCost(),d.getName()))
         
     def get(self):
     
@@ -195,6 +198,20 @@ class HearthstoneCard(object):
     def toDebugString(self):
 
         return '[%s:%s:%s] (%d) <For Hero: %s> <Type: %s>' % (self.name,self.rarity,self.id,self.cost,self.hero,self.type)
+
+    def getUniqueID(self): 
+      
+      ''' Uses built-in python function to return a unique integer associated with this instance. '''
+      
+      return str(id(self))
+
+    def __eq__(self,x):
+      
+      return (x.getID() == self.getID())
+      
+    def __ne__(self,x):
+      
+      return not self.__eq__(x)
 
     def __str__(self):
         

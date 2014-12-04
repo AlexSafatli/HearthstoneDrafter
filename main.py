@@ -6,7 +6,7 @@
 
 import webapp2, jinja2, os, cgi, hearthstone, json
 
-VERSION = 342
+VERSION = 359
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader = jinja2.FileSystemLoader(os.path.dirname(__file__)))
 

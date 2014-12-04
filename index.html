@@ -11,7 +11,8 @@
 		<meta name="description" content="Hearthstone Arena Drafting Webapp" />
 		
 		<script type="text/javascript" src="js/jquery-1.6.3.min.js"></script>
-		<script type="text/javascript" src="js/scripts.js"></script>
+       <script type="text/javascript" src="js/jquery.heatcolor.0.0.1.pack.js"></script>
+       <script type="text/javascript" src="js/scripts.js"></script>
 
  		<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
 <!-- 		<link href="css/mobile.css" rel="stylesheet" type="text/css" media="only screen and (max-device-width:480px)" />
@@ -22,9 +23,9 @@
 	<body>
 	
 		{% if draft %}
-		<div class="container">
+		<div id="card_collection" class="container">
 			{% for card in draft.getSortedCards() %}
-			<img class="card hsimgsmall" id="card_{{ card.getID() }}" src="{{ card.getImgLink() }}" alt="{{ card.getPlainStr() }}" />
+			<img class="card" id="card_{{ card.getUniqueID() }}" src="{{ card.getImgLink() }}" alt="{{ card.getPlainStr() }}" data-cardcost="{{ card.getCost() }}" />
 			{% endfor %}
 		</div>
 		{% endif %}
@@ -54,9 +55,9 @@
 				</div>
 			
 				<div class="panel" id="draft">
-					<h3>Choose a card:</h3>
+					<h3>Choose a card (<span id="draftcounter">1</span>/{{ draft.size() }}):</h3>
 					{% for set in draft.getSets() %}
-					<p {% if draft.index(set) == 0 %}id="draftshow"{% endif %} class="cards"><img id="card_draft_{{ set[0].getID() }}" class="hsimg rarity_img_{{ set[0].rarity }}" src="{{ set[0].getImgLink() }}" alt="{{ set[0].getPlainStr() }}" /> <img id="card_draft_{{ set[1].getID() }}" class="hsimg rarity_img_{{ set[1].rarity }}" src="{{ set[1].getImgLink() }}" alt="{{ set[1].getPlainStr() }}" /> <img id="card_draft_{{ set[2].getID() }}" class="hsimg rarity_img_{{ set[2].rarity }}" src="{{ set[2].getImgLink() }}" alt="{{ set[2].getPlainStr() }}" /></p>
+					<p {% if draft.index(set) == 0 %}id="draftshow"{% endif %} class="cards"><img id="card_draft_{{ set[0].getUniqueID() }}" class="hsimg rarity_img_{{ set[0].rarity }}" src="{{ set[0].getImgLink() }}" alt="{{ set[0].getPlainStr() }}" /> <img id="card_draft_{{ set[1].getUniqueID() }}" class="hsimg rarity_img_{{ set[1].rarity }}" src="{{ set[1].getImgLink() }}" alt="{{ set[1].getPlainStr() }}" /> <img id="card_draft_{{ set[2].getUniqueID() }}" class="hsimg rarity_img_{{ set[2].rarity }}" src="{{ set[2].getImgLink() }}" alt="{{ set[2].getPlainStr() }}" /></p>
 					{% endfor %}
 				</div>
 				

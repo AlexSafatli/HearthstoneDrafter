@@ -4,12 +4,14 @@
        width:120px;
 }
 
-.hsimgsmall {
+.card {
 	   width:75px;
+      margin:-0.2em;
 }
 
 .hsimg:hover {
        background-color:#006089;
+       cursor:pointer;
 }
 
 .card_Spell {
