@@ -12,7 +12,9 @@
 		
 		<script type="text/javascript" src="js/jquery-1.6.3.min.js"></script>
        <script type="text/javascript" src="js/jquery.heatcolor.0.0.1.pack.js"></script>
+       <script type="text/javascript" src="js/Chart.min.js"></script>
        <script type="text/javascript" src="js/scripts.js"></script>
+		
 
  		<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
 <!-- 		<link href="css/mobile.css" rel="stylesheet" type="text/css" media="only screen and (max-device-width:480px)" />
@@ -34,13 +36,21 @@
 		
 			<form class="mgform">
 				<div class="mgformitem">
-					<button type="submit">Draft for</button>
-					<select name="hero">
-					        <option value="random" selected>Random</option>
-					{% for hero in classes %}
-						<option value="{{ hero }}">{{ hero }}</option>
-					{% endfor %}
-					</select>
+					<span class="mgforminline">
+						<strong>Class</strong>
+						<select name="hero">
+							<option value="random" selected>Random</option>
+						{% for hero in classes %}
+							<option value="{{ hero }}">{{ hero }}</option>
+						{% endfor %}
+						</select>
+					</span>
+					<span class="mgforminline">
+						<strong>Mode</strong> <span id="arenabutton" class="popupbutton">{{ mode.getDefaultMode().name }}</span>
+					</span>
+					<button type="submit">Draft</button>
+					<input id="mgmode" type="hidden" name="mode" value="{{ mode.getDefaultMode().key }}" />
+					<input id="mgopt" type="hidden" name="option" value="" /> 				
 				</div>
 			</form>
 		
@@ -48,16 +58,18 @@
 			<div class="outcome">
 			
 				<div class="panel">
-					<p class="biggie">{{ hero.getName() }}</p> 
-					<p class="smaller">
-						with <em>{{ draft.getNumLegendaries() }}</em> legendary cards 
-					</p>			
+					<p class="biggie">{{ hero.getName() }}</p>
+					<p class="smaller">using game mode <strong>{{ mode.getCurrentMode().name }}</strong></p>
+					<canvas id="manacurve" width="130" height="130"></canvas>				
 				</div>
 			
 				<div class="panel" id="draft">
 					<h3>Choose a card (<span id="draftcounter">1</span>/{{ draft.size() }}):</h3>
 					{% for set in draft.getSets() %}
-					<p {% if draft.index(set) == 0 %}id="draftshow"{% endif %} class="cards"><img id="card_draft_{{ set[0].getUniqueID() }}" class="hsimg rarity_img_{{ set[0].rarity }}" src="{{ set[0].getImgLink() }}" alt="{{ set[0].getPlainStr() }}" /> <img id="card_draft_{{ set[1].getUniqueID() }}" class="hsimg rarity_img_{{ set[1].rarity }}" src="{{ set[1].getImgLink() }}" alt="{{ set[1].getPlainStr() }}" /> <img id="card_draft_{{ set[2].getUniqueID() }}" class="hsimg rarity_img_{{ set[2].rarity }}" src="{{ set[2].getImgLink() }}" alt="{{ set[2].getPlainStr() }}" /></p>
+					<p {% if draft.index(set) == 0 %}id="draftshow"{% endif %} class="cards">
+						{% for card in set %}
+						<img id="card_draft_{{ card.getUniqueID() }}"  class="hsimg rarity_img_{{ card.rarity }}" src="{{ card.getImgLink() }}" alt="{{ card.getPlainStr() }}" data-cardname="{{ card.getName() }}" data-cardcost="{{ card.getCost() }}" data-cardfaction="{{ card.getFaction() }}" data-cardtext="{{ card.getText() }}" data-cardatk="{{ card.getAttack() }}" data-carddef="{{ card.getDefense() }}"  />
+						{% endfor %}
 					{% endfor %}
 				</div>
 				
@@ -68,7 +80,8 @@
 			
 				<div id="thanks">
 				        <p>Version Alpha({{ version }})</p>
-					<p>You are using this app? Drop by to say thank you to <a href="https://plus.google.com/u/0/106697676547517787361/posts" target="_blank">+Alex Safatli</a>.</p>
+					<p>Do you find this webapp useful? Thank the author <a href="http://twitter.com/asafatli" target="_blank">Alex Safatli</a>.</p>
+					<p>This application is <a href="http://github.com/AlexSafatli/HearthstoneDrafter">open-source</a>.</p>
 				</div>
 	
 				<div id="legal">			
@@ -80,6 +93,28 @@
 		</div>
 	
         <div id="clear"></div>
+	<div class="popup" style="display: none; z-index: 3; position: absolute;">
+		<div id="pspan">
+			<h3>Game Mode</h3>
+			{% for m in mode.getModes() %}
+				<span id="{{ m.key }}" class="pmode popupbutton">{{ m.name }}</span>
+			{% endfor %}
+			<hr />
+			<div class="pdesc" id="default_desc">Choose a <strong>game mode</strong> by selecting one above.</div>
+			{% for m in mode.getModes() %}
+				<div id="{{ m.key }}_desc" class="pdesc" style="display:none;">{{ m.description }}
+				{% if m.options %}
+				  {% for option in m.options %}
+				    <div id="{{ option }}" class="popupbutton poption {{ m.key }}_opt">{{ option }}</div>
+				  {% endfor %}
+				{% endif %}
+				</div>
+			{% endfor %}			
+			<button>Select</button>
+			<p id="phelp"></div>
+		</div>
+	</div>   
+	<div class="tooltip" style="display: none;"></div>
     
 	</body>
 

@@ -1,116 +1,32 @@
-from random import choice, uniform
-import json, copy
+import json, copy, os
 
-HS_CARD_DATA   = 'data/cards.json'
-HS_RARITY_RANK = {0:'Free',1:'Common',2:'Rare',3:'Epic',4:'Legendary'}
-
-class drafter(object):
-
-    def __init__(self,preferred_hero=None):
-
-      self.hero       = preferred_hero
-      self.collection = HearthstoneCollection()
-      self.sets       = []      
-    
-    def __len__(self): return len(self.sets)
-    def size(self): return self.__len__()
-    
-    def _makeSequenceOfApplicableCards(self,rarity):
-
-        coll = self.collection
-        itercards = lambda d: coll.iterCardsForRarity(HS_RARITY_RANK[d])
-
-        # Get all cards.
-        cards = [card for card in itercards(rarity) if not card.getHero() or card.getHero() == self.hero.getHero()]
-
-        # Couple basic and common cards.                                                                 
-        if rarity == 1:
-            cards += [card for card in itercards(0) if not card.getHero() or card.getHero() == self.hero.getHero()]
-
-        # Go through and only return cards that are class types.
-        return cards
-
-    def _getSet(self,curr=1):
-
-        # See what tier of rarity.
-        currRarity = curr
-        random     = uniform(0,1)
-        while random <= 0.2 and currRarity < len(HS_RARITY_RANK) - 1:
-            # Upgrade to the next tier!
-            currRarity += 1
-            random = uniform(0,1)
-        
-        # Assign a set of three cards of this rarity type.
-        cards = self._makeSequenceOfApplicableCards(currRarity)
-        set   = []
-        for x in xrange(3):
-            card = choice(cards)
-            while card in set:
-                card = choice(cards)
-            set.append(copy.deepcopy(card))
-        return tuple(set)
-
-    def getNumLegendaries(self):
-
-        return self.getNumOfCardsForRarity('Legendary')
-    
-    def getNumOfCardsForRarity(self,rarity):
-
-        ''' Acquire the number of cards in the draft by their rarity (string). '''
-
-        num = 0
-        for set in self.sets:
-            if set[0].getRarity() == rarity:
-                num +=1
-        return num
-    
-    def getSets(self): return self.sets
-    def index(self,i): return self.sets.index(i)
-    
-    def getSortedCards(self):
-	
-        ''' Return a sorted list of all present cards in the draft. '''
-		
-        cards = []
-        for set in self.sets:
-            for card in set: cards.append(card)
-        return sorted(cards,key=lambda d: (d.getCost(),d.getName()))
-        
-    def get(self):
-    
-        ''' Make the draft of thirty sets of three cards. '''
-
-        # Random hero.
-        if self.hero is None or self.hero not in self.collection.getHeroNames():
-            self.hero = choice(self.collection.getHeroes())
-        elif self.hero in self.collection.getHeroNames():
-            self.hero = self.collection.getHeroes()[self.collection.getHeroNames(
-                    ).index(self.hero)]
-      
-        # Random cards.
-        for set in xrange(30):
-            if set in [0,9,19,29]:
-                self.sets.append(self._getSet(2))
-            else: self.sets.append(self._getSet())
-
-        return (self.hero,self.sets)
+HS_CARD_DATA = os.path.join(os.path.split(__file__)[0],'cards.json')
+HS_FACT_DATA = os.path.join(os.path.split(__file__)[0],'factions.json')
+HS_FACTIONS  = {0:None,1:'Alliance',2:'Horde',3:'Neutral'}
 
 class HearthstoneDataFile(object):
-    
+
     def __init__(self,pathToFile):
-        
+
         self.path  = pathToFile
         self.handl = open(self.path)
         self.data  = json.load(self.handl)
         self.types = self.data.keys()
+        self.factionpatch = open(HS_FACT_DATA)
+        self.factiondata = json.load(self.factionpatch)
         self.rarities = []
         self.handl.close()
+
+    def _patchCardFaction(self,carddata,id):
+        if id in self.factiondata:
+            carddata['faction'] = HS_FACTIONS[self.factiondata[id]['faction']]
 
     def iterCards(self):
 
         for typekey in self.types:
             for carddata in self.data[typekey]:
                 cardid   = carddata['id']
+                self._patchCardFaction(carddata,cardid)
                 cardname = carddata['name']
                 if 'cost' in carddata: cardcost = carddata['cost']
                 else: cardcost = 0
@@ -125,10 +41,22 @@ class HearthstoneDataFile(object):
                     if cardrarity not in self.rarities: self.rarities.append(cardrarity)
                 else: cardrarity = 'None'
                 cardtype = typekey
-                yield self._makeCard(cardid,cardname,cardcost,cardcoll,cardrarity,cardhero,cardtype)
+                if 'faction' in carddata:
+                    cardfact = carddata['faction']
+                else: cardfact = None
+                if 'text' in carddata:
+                    cardtext = carddata['text']
+                else: cardtext = '<em>No text was found for this card.</em>'
+                if 'attack' in carddata:
+                    cardatk  = carddata['attack']
+                else: cardatk = 0
+                if 'health' in carddata:
+                    carddef  = carddata['health']
+                else: carddef = 0
+                yield self._makeCard(cardid,cardname,cardcost,cardcoll,cardrarity,cardhero,cardtype,cardfact,cardtext,cardatk,carddef)
 
-    def _makeCard(self,id,name,cost,coll,rarity,hero,type):
-        return HearthstoneCard(id,name,cost,coll,rarity,hero,type)
+    def _makeCard(self,id,name,cost,coll,rarity,hero,type,fact,txt,a,h):
+        return HearthstoneCard(id,name,cost,coll,rarity,hero,type,fact,txt,a,h)
 
 class HearthstoneCollection(object):
 
@@ -151,9 +79,9 @@ class HearthstoneCollection(object):
                     carddata[card.getType()] = []
                     self.types.append(card.getType())
                 carddata[card.getType()].append(card)
-                
+
         return carddata
-                    
+
     def getRarities(self): return self.datafile.rarities
     def getTypes(self): return self.types
     def iterCardsForType(self,ty): return [card for card in self.cards[ty]]
@@ -162,15 +90,20 @@ class HearthstoneCollection(object):
         for type in self.getTypes():
             for card in self.iterCardsForType(type):
                 if card.getRarity() == rar: yield card
- 
+                
+    def iterCards(self):
+        for type in self.getTypes():
+            for card in self.iterCardsForType(type):
+                yield card
+
     def getHeroes(self):    return self.heroes
     def getHeroNames(self): return [x.getHero() for x in self.heroes]
- 
+
 
 class HearthstoneCard(object):
-    
-    def __init__(self,id='',name='',cost=0,collectible=True,rarity='Free',hero=None,type=''):
-        
+
+    def __init__(self,id='',name='',cost=0,collectible=True,rarity='Free',hero=None,type='',faction='',text='',atk=0,hp=0):
+
         self.id = id
         self.name = name
         self.cost = cost
@@ -178,6 +111,10 @@ class HearthstoneCard(object):
         self.rarity = rarity
         self.hero = hero
         self.type = type
+        self.faction = faction
+        self.text = text
+        self.attack = atk
+        self.defense = hp
 
     def getID(self): return self.id
     def getName(self): return self.name
@@ -186,7 +123,11 @@ class HearthstoneCard(object):
     def getRarity(self): return self.rarity
     def getType(self): return self.type
     def getHero(self): return self.hero
-	
+    def getFaction(self): return self.faction
+    def getText(self): return self.text
+    def getAttack(self): return self.attack
+    def getDefense(self): return self.defense
+
     def getImgLink(self):
 
         return 'http://wow.zamimg.com/images/hearthstone/cards/enus/original/%s.png' % (self.id)
@@ -194,27 +135,27 @@ class HearthstoneCard(object):
     def getPlainStr(self):
 
         return '%s (%d)' % (self.name,self.cost)
-    
+
     def toDebugString(self):
 
         return '[%s:%s:%s] (%d) <For Hero: %s> <Type: %s>' % (self.name,self.rarity,self.id,self.cost,self.hero,self.type)
 
     def getUniqueID(self): 
-      
-      ''' Uses built-in python function to return a unique integer associated with this instance. '''
-      
-      return str(id(self))
+
+        ''' Uses built-in python function to return a unique integer associated with this instance. '''
+
+        return str(id(self))
 
     def __eq__(self,x):
-      
-      return (x.getID() == self.getID())
-      
+
+        return (x.getID() == self.getID())
+
     def __ne__(self,x):
-      
-      return not self.__eq__(x)
+
+        return not self.__eq__(x)
 
     def __str__(self):
-        
+
         str = '<span class="rarity_%s">%s</span>' % (self.rarity,self.name)
         if self.getHero() is not None: str = '<span class="card_Spell">' + str + '</span>'
         return str + ' (%d)' % (self.cost)

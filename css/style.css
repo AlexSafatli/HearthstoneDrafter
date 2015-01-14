@@ -167,10 +167,157 @@ ol{
 	margin-bottom:5px;
 }
 
+.mgform button {
+	float:right;
+}
+
+.mgforminline {
+	margin-left:2em;
+	margin-right:2em;
+}
+
+.popupbutton {
+	background-color:#006089;
+	padding:0.45em;
+	color:white;
+	cursor:pointer;
+}
+
+.popupbutton:hover {
+    background-color:#000;
+}
+
 /* floats */
 
 #clear {
     float:clear;
+}
+
+/* popups */
+
+.popup {
+   position: fixed;
+   top: 40%; left: 40%;
+   width: 400px; height: auto;
+   padding: 0 25px 25px 25px;
+   background: #fff;
+   border: 5px solid #006089;
+   border-radius: 4px;
+   font-family: Helvetica, Arial, "Liberation Sans", sans-serif;
+   font-size: 1.0em;
+   color: black;
+}
+
+.popup #pspan {
+   margin-bottom:10px;
+   text-align: center;
+}
+
+.popup label {
+   margin-right: 5px;
+   float: left;
+}
+
+.popup input {
+   float: right;
+   margin-bottom:20px;
+}
+
+.popup button {
+   font-size:100%;   
+}
+
+.popup h3 {
+   font-size: 1.5em;
+   text-align:center;
+}
+
+.popup hr {
+   display:block;
+   height:1px;
+   border:0;
+   border-top: 1px solid #006089;
+   margin-top:1.75em;
+   padding:0;
+}
+
+.popup .pdesc {
+   padding:0.9em;
+}
+
+.popup .poption {
+   margin:0.75em auto 0.75em auto;
+   width:25%;
+}
+
+/* tooltips */
+
+.tooltip {
+   position: absolute;
+   width: 10em;
+   height: auto;
+   padding: 0 10px 10px 10px;
+   background: #333;
+   border: 0px;
+   border-radius: 8px;
+   pointer-events: none;
+   font-family: "Open Sans", Helvetica, Arial, "Liberation Sans", sans-serif;
+   font-size:0.8em;
+   color: white;
+}
+
+.tooltip .cardCost {
+  position:absolute;
+  background-image:url('../img/mana.png');
+  background-repeat:no-repeat;
+  background-position:center center;
+  background-size: 25px 25px;
+  text-align:center;
+  padding:0;
+  margin:0;
+  line-height:25px;
+  width:25px;
+  top:-10px;
+  left:-10px;
+  font-weight:bold;
+}
+
+.tooltip .cardAttack {
+  position:absolute;
+  background-image:url('../img/attack.png');
+  background-repeat:no-repeat;
+  background-position:left top;
+  background-size: 26px 30px;
+  text-align:center;
+  padding:0;
+  margin:0;
+  line-height:35px;
+  width:30px;
+  bottom:-10px;
+  left:-10px;
+  font-weight:bold;
+  color:black;
+}
+
+.tooltip .cardDef {
+  position:absolute;
+  background-image:url('../img/hp.png');
+  background-repeat:no-repeat;
+  background-position:left top;
+  background-size: 20px 28px;
+  text-align:center;
+  padding:0;
+  margin:0;
+  line-height:32px;
+  width:20px;
+  bottom:-10px;
+  right:-10px;
+  font-weight:bold;
+}
+
+.tooltip h3 {
+   font-weight:bold;
+   text-align:center;
 }
 
 /* --- OLD WRAP ---
