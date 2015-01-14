@@ -10,7 +10,6 @@
 }
 
 .hsimg:hover {
-       background-color:#006089;
        cursor:pointer;
 }
 
@@ -18,20 +17,20 @@
         font-weight:bold;
 }
 
-.rarity_Common {
-        color: #B5AFB4;
+.rarity_Common:hover {
+        background-color: #B5AFB4;
 }
 
-.rarity_Rare {
-        color: #2A2FE8;
+.rarity_Rare:hover {
+        background-color: #2A2FE8;
 }
 
-.rarity_Epic {
-        color: #891CFF;
+.rarity_Epic:hover {
+        background-color: #891CFF;
 }
 
-.rarity_Legendary {
-        color: #E89A3E;
+.rarity_Legendary:hover {
+        background-color: #ff8000;
 }
 
 /* links */

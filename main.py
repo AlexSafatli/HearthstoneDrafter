@@ -8,7 +8,7 @@ import webapp2, jinja2, os, cgi, hearthstone, json
 from drafter import drafter
 from gameMode import gameModeContext
 
-VERSION = 387
+VERSION = 390
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader = jinja2.FileSystemLoader(os.path.dirname(__file__)))
 

@@ -68,7 +68,7 @@
 					{% for set in draft.getSets() %}
 					<p {% if draft.index(set) == 0 %}id="draftshow"{% endif %} class="cards">
 						{% for card in set %}
-						<img id="card_draft_{{ card.getUniqueID() }}"  class="hsimg rarity_img_{{ card.rarity }}" src="{{ card.getImgLink() }}" alt="{{ card.getPlainStr() }}" data-cardname="{{ card.getName() }}" data-cardcost="{{ card.getCost() }}" data-cardfaction="{{ card.getFaction() }}" data-cardtext="{{ card.getText() }}" data-cardatk="{{ card.getAttack() }}" data-carddef="{{ card.getDefense() }}"  />
+						<img id="card_draft_{{ card.getUniqueID() }}"  class="hsimg rarity_{{ card.rarity }}" src="{{ card.getImgLink() }}" alt="{{ card.getPlainStr() }}" data-cardname="{{ card.getName() }}" data-cardcost="{{ card.getCost() }}" data-cardfaction="{{ card.getFaction() }}" data-cardtext="{{ card.getText() }}" data-cardatk="{{ card.getAttack() }}" data-carddef="{{ card.getDefense() }}"  />
 						{% endfor %}
 					{% endfor %}
 				</div>
