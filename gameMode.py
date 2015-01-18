@@ -11,10 +11,11 @@ HS_GAME_MODES      = [os.path.split(x)[-1].strip('.py') for x in HS_GAME_MODE_FI
 
 class gameModeContext(object):
     
-    def __init__(self,currmode):
+    def __init__(self,currmode, option):
         self.modes = HS_GAME_MODES
         self.files = HS_GAME_MODE_FILES
         self.currmode = globals()[currmode]
+        self.option = option
     
     def getCurrentMode(self): return self.currmode
     def getDefaultMode(self): return globals()[HS_DEFAULT_MODE]
@@ -22,6 +23,7 @@ class gameModeContext(object):
         modes = []
         for m in self.modes: modes.append(globals()[m])
         return modes
+    def getOption(self): return self.option
 
 def getMode(mode):
     

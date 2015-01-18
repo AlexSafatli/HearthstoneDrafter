@@ -5,7 +5,7 @@
 
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 
-		<title>HearthstoneDrafter: An Open-Source Arena Drafter for Hearthstone</title>
+		<title>HearthstoneDrafter: An Open Source Arena Drafter for Hearthstone</title>
 
 		<meta name="author" content="Alex Safatli" />
 		<meta name="description" content="Hearthstone Arena Drafting Webapp" />
@@ -14,11 +14,8 @@
        <script type="text/javascript" src="js/jquery.heatcolor.0.0.1.pack.js"></script>
        <script type="text/javascript" src="js/Chart.min.js"></script>
        <script type="text/javascript" src="js/scripts.js"></script>
-		
 
  		<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
-<!-- 		<link href="css/mobile.css" rel="stylesheet" type="text/css" media="only screen and (max-device-width:480px)" />
-		<link href="css/mobile.css" rel="stylesheet" type="text/css" media="handheld" />-->
 
 	</head>
 
@@ -27,7 +24,7 @@
 		{% if draft %}
 		<div id="card_collection" class="container">
 			{% for card in draft.getSortedCards() %}
-			<img class="card" id="card_{{ card.getUniqueID() }}" src="{{ card.getImgLink() }}" alt="{{ card.getPlainStr() }}" data-cardcost="{{ card.getCost() }}" />
+			<a href="{{ card.getHearthheadURL() }}" target="_blank"><img class="card" id="card_{{ card.getUniqueID() }}" src="" alt="{{ card.getPlainStr() }}" data-cardcost="{{ card.getCost() }}" /></a>
 			{% endfor %}
 		</div>
 		{% endif %}
@@ -59,8 +56,8 @@
 			
 				<div class="panel">
 					<p class="biggie">{{ hero.getName() }}</p>
-					<p class="smaller">using game mode <strong>{{ mode.getCurrentMode().name }}</strong></p>
-					<canvas id="manacurve" width="130" height="130"></canvas>				
+					<p class="smaller">using game mode <strong>{{ mode.getCurrentMode().name }}</strong> {% if mode.getOption() %}({{ mode.getOption() }}){% endif %}</p>
+					<canvas id="manacurve" width="200" height="130"></canvas>				
 				</div>
 			
 				<div class="panel" id="draft">
@@ -68,7 +65,7 @@
 					{% for set in draft.getSets() %}
 					<p {% if draft.index(set) == 0 %}id="draftshow"{% endif %} class="cards">
 						{% for card in set %}
-						<img id="card_draft_{{ card.getUniqueID() }}"  class="hsimg rarity_{{ card.rarity }}" src="{{ card.getImgLink() }}" alt="{{ card.getPlainStr() }}" data-cardname="{{ card.getName() }}" data-cardcost="{{ card.getCost() }}" data-cardfaction="{{ card.getFaction() }}" data-cardtext="{{ card.getText() }}" data-cardatk="{{ card.getAttack() }}" data-carddef="{{ card.getDefense() }}"  />
+						<img id="card_draft_{{ card.getUniqueID() }}"  class="hsimg rarity_{{ card.rarity }}" src="{{ card.getImgThumbnail() }}" alt="{{ card.getPlainStr() }}" data-cardname="{{ card.getName() }}" data-cardcost="{{ card.getCost() }}" data-cardfaction="{{ card.getFaction() }}" data-cardtext='{{ card.getText() }}' data-cardatk="{{ card.getAttack() }}" data-carddef="{{ card.getDefense() }}" />
 						{% endfor %}
 					{% endfor %}
 				</div>
@@ -81,7 +78,7 @@
 				<div id="thanks">
 				        <p>Version Alpha({{ version }})</p>
 					<p>Do you find this webapp useful? Thank the author <a href="http://twitter.com/asafatli" target="_blank">Alex Safatli</a>.</p>
-					<p>This application is <a href="http://github.com/AlexSafatli/HearthstoneDrafter">open-source</a>.</p>
+					<p>This application is <a href="http://github.com/AlexSafatli/HearthstoneDrafter">open source</a>.</p>
 				</div>
 	
 				<div id="legal">			

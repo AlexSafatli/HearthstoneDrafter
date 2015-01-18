@@ -1,7 +1,8 @@
 import json, copy, os
 
-HS_CARD_DATA = os.path.join(os.path.split(__file__)[0],'cards.json')
-HS_FACT_DATA = os.path.join(os.path.split(__file__)[0],'factions.json')
+HS_CARD_DATA  = os.path.join(os.path.split(__file__)[0],'cards.json')
+HS_FACT_DATA  = os.path.join(os.path.split(__file__)[0],'factions.json')
+HS_HHEAD_DATA = os.path.join(os.path.split(__file__)[0],'hearthhead.json')
 HS_FACTIONS  = {0:None,1:'Alliance',2:'Horde',3:'Neutral'}
 
 class HearthstoneDataFile(object):
@@ -14,13 +15,15 @@ class HearthstoneDataFile(object):
         self.types = self.data.keys()
         self.factionpatch = open(HS_FACT_DATA)
         self.factiondata = json.load(self.factionpatch)
+        self.hearthheadpatch = open(HS_HHEAD_DATA)
+        self.hearthheaddata = json.load(self.hearthheadpatch)
         self.rarities = []
         self.handl.close()
 
     def _patchCardFaction(self,carddata,id):
         if id in self.factiondata:
             carddata['faction'] = HS_FACTIONS[self.factiondata[id]['faction']]
-
+            
     def iterCards(self):
 
         for typekey in self.types:
@@ -56,7 +59,11 @@ class HearthstoneDataFile(object):
                 yield self._makeCard(cardid,cardname,cardcost,cardcoll,cardrarity,cardhero,cardtype,cardfact,cardtext,cardatk,carddef)
 
     def _makeCard(self,id,name,cost,coll,rarity,hero,type,fact,txt,a,h):
-        return HearthstoneCard(id,name,cost,coll,rarity,hero,type,fact,txt,a,h)
+        card = HearthstoneCard(id,name,cost,coll,rarity,hero,type,fact,txt,a,h)
+        if id in self.hearthheaddata:
+            card.hearthhead_id  = self.hearthheaddata[id]['hearthhead_id' ]
+            card.hearthhead_url = self.hearthheaddata[id]['hearthhead_url']
+        return card
 
 class HearthstoneCollection(object):
 
@@ -102,7 +109,7 @@ class HearthstoneCollection(object):
 
 class HearthstoneCard(object):
 
-    def __init__(self,id='',name='',cost=0,collectible=True,rarity='Free',hero=None,type='',faction='',text='',atk=0,hp=0):
+    def __init__(self,id='',name='',cost=0,collectible=True,rarity='Free',hero=None,type='',faction='',text='',atk=0,hp=0,hh_id=None,hh_url=''):
 
         self.id = id
         self.name = name
@@ -115,6 +122,9 @@ class HearthstoneCard(object):
         self.text = text
         self.attack = atk
         self.defense = hp
+        self.hearthhead_id = hh_id
+        self.hearthhead_url = hh_url
+        self.goldCard = False
 
     def getID(self): return self.id
     def getName(self): return self.name
@@ -124,13 +134,37 @@ class HearthstoneCard(object):
     def getType(self): return self.type
     def getHero(self): return self.hero
     def getFaction(self): return self.faction
-    def getText(self): return self.text
+    def getText(self): return self.text.replace("'","\'")
     def getAttack(self): return self.attack
     def getDefense(self): return self.defense
+    def getHearthheadURL(self): return self.hearthhead_url
+    def setGoldCard(self,gold): self.goldCard = gold
+
+    def _imgLink(self,size,gold=False):
+        
+        if self.goldCard or gold: gold_str = '_premium'
+        else:                     gold_str = ''
+        if size not in ['small','medium','original','animated']:
+            raise ValueError('Size provided not defined.')
+        if size == 'animated': ext = 'gif'
+        else: ext = 'png'
+        return 'http://wow.zamimg.com/images/hearthstone/cards/enus/%s/%s%s.%s' % (size,self.id,gold_str,ext)
+
+    def getImgThumbnail(self):
+        
+        return self._imgLink('small')
 
     def getImgLink(self):
 
-        return 'http://wow.zamimg.com/images/hearthstone/cards/enus/original/%s.png' % (self.id)
+        return self._imgLink('medium')
+
+    def getFullImgLink(self):
+        
+        return self._imgLink('original')
+
+    def getAnimatedImgLink(self):
+        
+        return self._imgLink('animated',True)
 
     def getPlainStr(self):
 
@@ -139,6 +173,12 @@ class HearthstoneCard(object):
     def toDebugString(self):
 
         return '[%s:%s:%s] (%d) <For Hero: %s> <Type: %s>' % (self.name,self.rarity,self.id,self.cost,self.hero,self.type)
+
+    def toPlainHTMLString(self):
+        
+        str = '<span class="rarity_%s">%s</span>' % (self.rarity,self.name)
+        if self.getHero() is not None: str = '<span class="card_Spell">' + str + '</span>'
+        return str + ' (%d)' % (self.cost)        
 
     def getUniqueID(self): 
 
@@ -156,6 +196,4 @@ class HearthstoneCard(object):
 
     def __str__(self):
 
-        str = '<span class="rarity_%s">%s</span>' % (self.rarity,self.name)
-        if self.getHero() is not None: str = '<span class="card_Spell">' + str + '</span>'
-        return str + ' (%d)' % (self.cost)
+        return self.toPlainHTMLString()

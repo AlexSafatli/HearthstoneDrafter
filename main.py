@@ -8,7 +8,7 @@ import webapp2, jinja2, os, cgi, hearthstone, json
 from drafter import drafter
 from gameMode import gameModeContext
 
-VERSION = 390
+VERSION = 401
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader = jinja2.FileSystemLoader(os.path.dirname(__file__)))
 
@@ -19,6 +19,7 @@ class MainPage(webapp2.RequestHandler):
         hero  = cgi.escape(self.request.get('hero'))
         gmode = cgi.escape(self.request.get('mode'))
         opt   = cgi.escape(self.request.get('option'))
+        gold  = cgi.escape(self.request.get('gold'))
                 
         # Set values in case of empty input.
         if hero == '' or hero == 'random': hero = None
@@ -30,11 +31,11 @@ class MainPage(webapp2.RequestHandler):
         # If a type was provided from input...
         if True:
             # Instantiate and provide a draft.
-            draft = drafter(preferred_hero=hero,mode=gmode,tag={'faction':opt})
+            draft = drafter(preferred_hero=hero,mode=gmode,tag={'faction':opt,'gold':gold})
             hero, draftsets = draft.get()
             
         # Jinja template value and handling.
-        mode = gameModeContext(gmode)
+        mode = gameModeContext(gmode,opt)
         template_values = {'mode':mode,'draft':draft,'hero':hero,'classes':draft.collection.getHeroNames(),'version':VERSION}
         template = JINJA_ENVIRONMENT.get_template('index.html')
         

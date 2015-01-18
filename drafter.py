@@ -57,5 +57,11 @@ class drafter(object):
         # Random cards.
         self.gamemode = self.gamemode(self.collection,self.hero,self.tag)
         self.sets = self.gamemode.getDraft(30)
+        
+        # See if gold cards are being requested.
+        if 'gold' in self.tag and self.tag['gold']:
+            for set in self.sets:
+                for card in set:
+                    card.setGoldCard(True)
 
         return (self.hero,self.sets)
