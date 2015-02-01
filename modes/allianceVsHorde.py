@@ -7,7 +7,7 @@ import copy
 name = 'Alliance vs. Horde'
 key  = 'allianceVsHorde'
 options = ['Alliance','Horde']
-description = "Battle your friend/opponent as one of the <strong>factions</strong> of Azeroth!"
+description = "Battle a friend as one of the <strong>factions</strong> of Azeroth!"
 
 class gameMode(mode):
     
@@ -16,8 +16,7 @@ class gameMode(mode):
         self.cards = []
     
     def tooManyCards(self,card):
-        if card.getRarity() == 'Legendary':
-            return (card in self.cards)
+        if card.getRarity() == 'Legendary': return (card in self.cards)
         else: return (self.cards.count(card) == 2)
     
     def getSet(self):
@@ -44,6 +43,5 @@ class gameMode(mode):
     def getDraft(self,numCards):
         
         sets = []
-        for set in xrange(numCards):
-            sets.append(self.getSet())
+        for set in xrange(numCards): sets.append(self.getSet())
         return sets

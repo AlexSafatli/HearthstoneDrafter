@@ -6,7 +6,7 @@ import os, glob
 HS_DEFAULT_MODE    = 'arena'
 HS_GAME_MODE_PATH  = os.path.join(os.path.split(__file__)[0],'modes')
 HS_GAME_MODE_FILES = glob.glob(os.path.join(HS_GAME_MODE_PATH,'*.py'))
-HS_GAME_MODES      = [os.path.split(x)[-1].strip('.py') for x in HS_GAME_MODE_FILES
+HS_GAME_MODES      = [os.path.split(x)[-1].strip('\.py') for x in HS_GAME_MODE_FILES
                      if not x.endswith('__init__.py')]
 
 class gameModeContext(object):

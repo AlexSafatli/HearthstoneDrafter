@@ -134,7 +134,7 @@ class HearthstoneCard(object):
     def getType(self): return self.type
     def getHero(self): return self.hero
     def getFaction(self): return self.faction
-    def getText(self): return self.text.replace("'","\'")
+    def getText(self): return self.text.replace('"',"&quot;")
     def getAttack(self): return self.attack
     def getDefense(self): return self.defense
     def getHearthheadURL(self): return self.hearthhead_url
