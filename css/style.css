@@ -56,8 +56,13 @@ html,body {
 
 body {
 	background-color:#FFF;
-	font-family:sans-serif;
+	font-family: sans-serif;
 	text-align:center;
+}
+
+h1,h2,h3 {
+  font-family:'Franklin Gothic Medium', 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif;
+  font-weight:200;
 }
 
 #wrap{
@@ -101,12 +106,18 @@ body {
 
 .biggie{
 	font-size:250%;
+  font-family:'Franklin Gothic Medium', 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif;
 	margin-bottom:2px;
 }
 
 .smaller{
 	padding-top:20px;
 	font-size:75%;
+  font-weight:100;
+}
+
+.version {
+  font-variant: small-caps;
 }
 
 #legal{
@@ -260,7 +271,8 @@ ol{
    border: 0px;
    border-radius: 8px;
    pointer-events: none;
-   font-family: "Open Sans", Helvetica, Arial, "Liberation Sans", sans-serif;
+   font-weight:50;
+   font-family: 'Franklin Gothic Medium', 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif;
    font-size:0.8em;
    color: white;
 }
@@ -279,6 +291,7 @@ ol{
   top:-10px;
   left:-10px;
   font-weight:bold;
+  font-family:sans-serif;
 }
 
 .tooltip .cardAttack {
@@ -296,6 +309,7 @@ ol{
   left:-10px;
   font-weight:bold;
   color:black;
+  font-family:sans-serif;
 }
 
 .tooltip .cardDef {
@@ -311,6 +325,7 @@ ol{
   width:20px;
   bottom:-10px;
   right:-10px;
+  font-family:sans-serif;
   font-weight:bold;
 }
 
@@ -318,13 +333,3 @@ ol{
    font-weight:bold;
    text-align:center;
 }
-
-/* --- OLD WRAP ---
-#wrap{
-	background-color:#E2D5C1;
-	width:425px;
-	padding:10px;
-	border:5px solid #D4C098;
-	margin:auto;
-}
-  --- OLD WRAP --- */

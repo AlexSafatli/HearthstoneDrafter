@@ -8,7 +8,8 @@ import webapp2, jinja2, os, cgi, hearthstone, json
 from drafter import drafter
 from gameMode import gameModeContext
 
-VERSION = 403
+VERSIONTYPE = 'Beta'
+VERSION = 1
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader = jinja2.FileSystemLoader(os.path.dirname(__file__)))
 
@@ -36,11 +37,12 @@ class MainPage(webapp2.RequestHandler):
             
         # Jinja template value and handling.
         mode = gameModeContext(gmode,opt)
-        template_values = {'mode':mode,'draft':draft,'hero':hero,'classes':draft.collection.getHeroNames(),'version':VERSION}
+        template_values = {'mode':mode,'draft':draft,'hero':hero,\
+            'classes':draft.collection.getHeroNames(),'version':VERSION,\
+            'version_category':VERSIONTYPE}
         template = JINJA_ENVIRONMENT.get_template('index.html')
         
         # Write to HTML file.
         self.response.write(template.render(template_values))
         
-app = webapp2.WSGIApplication([('/', MainPage)],
-                              debug=True)
+app = webapp2.WSGIApplication([('/', MainPage)],debug=True)

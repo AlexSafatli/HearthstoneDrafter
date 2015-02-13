@@ -2,29 +2,29 @@
 
 from __init__ import gameMode as mode
 from random import uniform, choice
-import copy
+from copy import deepcopy as new
 
-HS_RARITY_RANK = {0:'Free',1:'Common',2:'Rare',3:'Epic',4:'Legendary'}
+HS_RARITY_RANK    = {0:'Free',1:'Common',2:'Rare',3:'Epic',4:'Legendary'}
+HS_UPGRADE_CHANCE = 0.2
 
 name = 'Arena'
 key  = 'arena'
-description = "Emulate the standard Hearthstone arena and create a mock deck."
+description = "Emulate the standard Hearthstone arena and practice drafting by creating a mock deck."
 
 class gameMode(mode):
     
     def getCardsForRarity(self,rarity):
         
-        coll = self.collection
-        hero = self.hero
-        itercards = lambda d: coll.iterCardsForRarity(HS_RARITY_RANK[d])
+        coll   = self.collection
+        icards = lambda d: coll.iterCardsForRarity(HS_RARITY_RANK[d])
     
         # Get all cards.
-        cards = [card for card in itercards(rarity) if 
+        cards = [card for card in icards(rarity) if 
                  self.isApplicableCard(card)]
     
         # Couple basic and common cards.                                                                 
         if rarity == 1:
-            cards += [card for card in itercards(0) if 
+            cards += [card for card in icards(0) if 
                       self.isApplicableCard(card)]
     
         # Go through and only return cards that are class types.
@@ -38,7 +38,7 @@ class gameMode(mode):
         
         # See what tier of rarity.
         random = uniform(0,1)
-        while random <= 0.2 and currRarity < len(HS_RARITY_RANK) - 1:
+        while random <= HS_UPGRADE_CHANCE and currRarity < len(HS_RARITY_RANK) - 1:
             # Upgrade to the next tier!
             currRarity += 1
             random = uniform(0,1)
@@ -50,7 +50,7 @@ class gameMode(mode):
             card = choice(cards)
             while card in set:
                 card = choice(cards)
-            set.append(copy.deepcopy(card))
+            set.append(new(card))
         return tuple(set)     
     
     def getDraft(self,numCards):

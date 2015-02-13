@@ -2,6 +2,8 @@ from hearthstone import HearthstoneCollection
 from gameMode import getMode
 from random import choice
 
+NUM_CARDS_IN_DRAFT = 30
+
 class drafter(object):
 
     def __init__(self,preferred_hero=None,mode='arena',tag=None):
@@ -10,16 +12,14 @@ class drafter(object):
         self.gamemode   = getMode(mode)
         self.tag        = tag
         self.collection = HearthstoneCollection()
-        self.sets       = []
+        self.sets       = list()
         if self.gamemode == None:
-            raise NotImplemented('Game mode %s not defined.' % (mode))
+            raise Exception('Game mode %s not defined.' % (mode))
 
     def __len__(self): return len(self.sets)
     def size(self):    return self.__len__()
 
-    def getNumLegendaries(self):
-
-        return self.getNumOfCardsForRarity('Legendary')
+    def getNumLegendaries(self): return self.getNumOfCardsForRarity('Legendary')
 
     def getNumOfCardsForRarity(self,rarity):
 
@@ -27,8 +27,7 @@ class drafter(object):
 
         num = 0
         for set in self.sets:
-            if set[0].getRarity() == rarity:
-                num +=1
+            if set[0].getRarity() == rarity: num +=1
         return num
 
     def getSets(self): return self.sets
@@ -47,21 +46,20 @@ class drafter(object):
 
         ''' Make the draft of thirty sets of three cards. '''
 
-        # Random hero.
+        # Randomize the hero (if necessary).
         if self.hero is None or self.hero not in self.collection.getHeroNames():
             self.hero = choice(self.collection.getHeroes())
         elif self.hero in self.collection.getHeroNames():
             self.hero = self.collection.getHeroes()[self.collection.getHeroNames(
                 ).index(self.hero)]
 
-        # Random cards.
+        # Acquire the draft of cards based on game mode definitions.
         self.gamemode = self.gamemode(self.collection,self.hero,self.tag)
-        self.sets = self.gamemode.getDraft(30)
+        self.sets     = self.gamemode.getDraft(NUM_CARDS_IN_DRAFT)
         
         # See if gold cards are being requested.
         if 'gold' in self.tag and self.tag['gold']:
             for set in self.sets:
-                for card in set:
-                    card.setGoldCard(True)
+                for card in set: card.setGoldCard(True)
 
         return (self.hero,self.sets)

@@ -1,7 +1,7 @@
 // Everything to be executed after page load. 
-
 var mana;
-
+Chart.defaults.global.scaleFontFamily = 
+  "'Franklin Gothic Medium', 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif";
 $(document).ready(function () {  
 
   // Handle all card hiding.
