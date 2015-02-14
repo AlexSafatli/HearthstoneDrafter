@@ -1,4 +1,4 @@
-''' Establishes the plugin system for allowing different game modes for drafting. '''
+''' Establishes the plugin system for allowing different game modes for drafting. Uses Python syntax and features that should never see the light of day. Really gross code. Seriously. Don't read it. '''
 
 from modes import * # Get all game modes.
 import os, glob
@@ -32,6 +32,4 @@ def getMode(mode):
         return _mode.gameMode
     else: return None
 
-def isMode(mode):
-    
-    return (mode in HS_GAME_MODES)
+def isMode(mode): return (mode in HS_GAME_MODES)

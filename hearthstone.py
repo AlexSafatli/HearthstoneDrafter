@@ -1,14 +1,17 @@
-# Pythonic Interface to Hearthstone Data (Saved as JSON)
-#
+''' Pythonic Interface to Hearthstone Data (Saved as JSON). '''
+
 # Author: Alex Safatli
 # E-mail: safatli@cs.dal.ca
 # Date:   Oct 2014
 
 import json, copy, os
 
+# Data Path Definitions
 HS_CARD_DATA  = os.path.join(os.path.split(__file__)[0],'cards.json')
 HS_FACT_DATA  = os.path.join(os.path.split(__file__)[0],'factions.json')
 HS_HHEAD_DATA = os.path.join(os.path.split(__file__)[0],'hearthhead.json')
+
+# Factions (for factions.json file reading).
 HS_FACTIONS   = {0:None,1:'Alliance',2:'Horde',3:'Neutral'}
 
 class HearthstoneDataFile(object):

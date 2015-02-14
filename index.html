@@ -2,25 +2,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 
 	<head>
-
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-
 		<title>HearthstoneDrafter: An Open Source Arena Drafter for Hearthstone</title>
-
 		<meta name="author" content="Alex Safatli" />
 		<meta name="description" content="Hearthstone Arena Drafting Webapp" />
-		
 		<script type="text/javascript" src="js/jquery-1.6.3.min.js"></script>
-       <script type="text/javascript" src="js/jquery.heatcolor.0.0.1.pack.js"></script>
-       <script type="text/javascript" src="js/Chart.min.js"></script>
-       <script type="text/javascript" src="js/scripts.js"></script>
-
+      	<script type="text/javascript" src="js/jquery.heatcolor.0.0.1.pack.js"></script>
+    	<script type="text/javascript" src="js/Chart.min.js"></script>
+     	<script type="text/javascript" src="js/scripts.js"></script>
  		<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
-
 	</head>
 
 	<body>
-	
 		{% if draft %}
 		<div id="card_collection" class="container">
 			{% for card in draft.getSortedCards() %}
@@ -28,9 +21,7 @@
 			{% endfor %}
 		</div>
 		{% endif %}
-	
 		<div id="wrap">
-		
 			<form class="mgform">
 				<div class="mgformitem">
 					<span class="mgforminline">
@@ -50,16 +41,13 @@
 					<input id="mgopt" type="hidden" name="option" value="" /> 				
 				</div>
 			</form>
-		
 			{% if draft %}
 			<div class="outcome">
-			
 				<div class="panel">
 					<p class="biggie">{{ hero.getName() }}</p>
 					<p class="smaller">using game mode <strong>{{ mode.getCurrentMode().name }}</strong> {% if mode.getOption() %}({{ mode.getOption() }}){% endif %}</p>
 					<canvas id="manacurve" width="200" height="130"></canvas>				
 				</div>
-			
 				<div class="panel" id="draft">
 					<h3>Choose a card (<span id="draftcounter">1</span>/{{ draft.size() }}):</h3>
 					{% for set in draft.getSets() %}
@@ -69,32 +57,25 @@
 						{% endfor %}
 					{% endfor %}
 				</div>
-				
 			</div>
 			{% endif %}
-
 			<div id="fineprint">
-			
 				<div id="thanks">
-				        <p>Version <span class="version">{{ version_category }}({{ version }})</span></p>
+				    <p>Version <span class="version">{{ version_category }}({{ version }})</span></p>
 					<p>Do you find this webapp useful? Thank the author <a href="http://twitter.com/asafatli" target="_blank">Alex Safatli</a>.</p>
 					<p>This application is <a href="http://github.com/AlexSafatli/HearthstoneDrafter">open source</a>.</p>
 				</div>
-	
 				<div id="legal">			
 				  This app is in no way associated with or endorsed by Blizzard Entertainment&reg; Blizzard Entertainment&reg;, Hearthstone&reg;, and associated terms are trademarks or registered trademarks of Blizzard Entertainment, Inc. in the US and/or other countries. All rights reserved.
 				</div>
-
 			</div>
-			
 		</div>
-	
         <div id="clear"></div>
-	<div class="popup" style="display: none; z-index: 3; position: absolute;">
+		<div class="popup" style="display: none; z-index: 3; position: absolute;">
 		<div id="pspan">
 			<h3>Game Mode</h3>
 			{% for m in mode.getModes() %}
-				<span id="{{ m.key }}" class="pmode popupbutton">{{ m.name }}</span>
+			<span id="{{ m.key }}" class="pmode popupbutton">{{ m.name }}</span>
 			{% endfor %}
 			<hr />
 			<div class="pdesc" id="default_desc">Choose a <strong>game mode</strong> by selecting one above.</div>
@@ -110,9 +91,7 @@
 			<button>Select</button>
 			<p id="phelp"></div>
 		</div>
-	</div>   
-	<div class="tooltip" style="display: none;"></div>
-    
+		<div class="tooltip" style="display: none;"></div>
 	</body>
 
 </html>
