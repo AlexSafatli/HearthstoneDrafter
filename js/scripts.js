@@ -1,32 +1,20 @@
-// Everything to be executed after page load. 
-var mana;
+/* Client-side JavaScript Code for HearthstoneDrafter */
+
+// Global variables.
+var mana, draftCounter = 1;
+
+// Set font of chart.
 Chart.defaults.global.scaleFontFamily = 
   "'Franklin Gothic Medium', 'Franklin Gothic', 'ITC Franklin Gothic', Arial, sans-serif";
+
+// Get everything set after page load.
 $(document).ready(function () {  
 
   // Handle all card hiding.
-    $(".cards").hide();
-    $(".card").hide();
-    $("#draftshow").show();
-    $(".hsimg").click(function() {
-      // Drafting.
-      $("#draftcounter").text(parseInt($("#draftcounter").text())+1);
-      $(this).parent().next().attr("id","draftshow");
-      $(this).parent().attr("id","");
-      if ($(this).parent().next().length > 0) {
-        $(this).parent().next().show();
-      } else {
-        $("#draft").hide();
-      }
-      $(this).parent().hide();
-      var cardToShow = $('#' + $(this).attr("id").replace('card_draft_','card_')),
-         manaCost = parseInt(cardToShow.attr("data-cardcost")),
-         manaCategory;
-      if (manaCost >= 7) manaCategory = 7;
-      else manaCategory = manaCost;
-      mana.datasets[0].bars[manaCategory].value++; mana.update();
-      cardToShow.attr("src",$(this).attr("src")).show();
-    });
+  $(".cards").hide();
+  $(".card").hide();
+  $("#draftshow").show();
+  $(".hsimg").click(selectCard);
 
   // Handle card coloring.
   $("#card_collection .card").heatcolor(function(d) {
@@ -52,10 +40,41 @@ $(document).ready(function () {
 
 });
 
+// Draft selection.
+
+function selectCard() {
+
+  // Get container.
+  var container = $(this).parent()
+
+  // Move to next set of cards.
+  container.next().attr("id","draftshow");
+  container.attr("id","");
+  if (container.next().length > 0)
+    container.next().show();
+  else $("#draft").hide();
+  container.hide();
+
+  // Increment counter.
+  $("#draftcounter").text(++draftCounter);
+
+  // Show the card that was picked on the side of the site.
+  var cardToShow = $('#' + $(this).attr("id").replace('card_draft_','card_'));
+  cardToShow.attr("src",$(this).attr("src")).show();
+
+  // Add to mana curve.
+  var manaCost = parseInt(cardToShow.attr("data-cardcost")),
+    manaCategory;
+  if (manaCost >= 7) manaCategory = 7;
+  else manaCategory = manaCost;
+  mana.datasets[0].bars[manaCategory].value++; 
+  mana.update();
+
+}
+
 // Card tooltips.
 
 function cardTooltip(e) {
-
 
   var mousex = e.pageX + 20, mousey = e.pageY + 20, card = $(this);
   var hp_def = '<div class="cardDef">' + card.attr('data-carddef') + '</div>';

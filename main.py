@@ -9,7 +9,7 @@ from drafter import drafter
 from gameMode import gameModeContext
 
 VERSIONTYPE = 'Beta'
-VERSION = 3
+VERSION = 5
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader = jinja2.FileSystemLoader(os.path.dirname(__file__)))
 
